@@ -1,0 +1,166 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure(2) do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://atlas.hashicorp.com/search.
+  config.vm.define "one" do |one|
+  	one.vm.box = "centos7_x86-64"
+	one.vm.network "private_network", type: "dhcp"
+	one.vm.network "private_network", type: "dhcp"
+	one.vm.network "private_network", type: "dhcp"
+	one.vm.provider "virtualbox" do |v1|
+		v1.name = "Controller"
+		v1.memory = "2048"
+		v1.gui = true
+		v1.customize ["modifyvm", :id , "--hostonlyadapter2", "vboxnet0"]
+		v1.customize ["modifyvm", :id , "--hostonlyadapter3", "vboxnet1"]
+		v1.customize ["modifyvm", :id , "--hostonlyadapter4", "vboxnet2"]
+	end
+   one.vm.provision "shell", inline: <<-SHELL
+     mv /etc/yum.repos.d/*.repo /var/tmp/
+     cp /vagrant/*.repo /etc/yum.repos.d/
+     echo "redhat" | sudo passwd root --stdin
+   SHELL
+end
+  config.vm.define "two" do |two|
+  	two.vm.box = "centos7_x86-64"
+	two.vm.network "private_network", type: "dhcp"
+	two.vm.network "private_network", type: "dhcp"
+	two.vm.network "private_network", type: "dhcp"
+	two.vm.provider "virtualbox" do |v2|
+		v2.name = "Network"
+#		v2.gui = true
+		v2.memory = "2048"
+		v2.customize ["modifyvm", :id , "--hostonlyadapter2", "vboxnet0"]
+		v2.customize ["modifyvm", :id , "--hostonlyadapter3", "vboxnet1"]
+		v2.customize ["modifyvm", :id , "--hostonlyadapter4", "vboxnet2"]
+	end
+   two.vm.provision "shell", inline: <<-SHELL
+     mv /etc/yum.repos.d/*.repo /var/tmp/
+     cp /vagrant/*.repo /etc/yum.repos.d/
+     echo "redhat" | sudo passwd root --stdin
+   SHELL
+end
+
+  config.vm.define "three" do |three|
+  	three.vm.box = "centos7_x86-64"
+	three.vm.network "private_network", type: "dhcp"
+	three.vm.network "private_network", type: "dhcp"
+	three.vm.network "private_network", type: "dhcp"
+	three.vm.provider "virtualbox" do |v3|
+		v3.name = "Compute1"
+#		v3.gui = true
+		v3.memory = "2048"
+		v3.customize ["modifyvm", :id , "--hostonlyadapter2", "vboxnet0"]
+		v3.customize ["modifyvm", :id , "--hostonlyadapter3", "vboxnet1"]
+		v3.customize ["modifyvm", :id , "--hostonlyadapter4", "vboxnet2"]
+	end
+   three.vm.provision "shell", inline: <<-SHELL
+     mv /etc/yum.repos.d/*.repo /var/tmp/
+     cp /vagrant/*.repo /etc/yum.repos.d/
+     echo "redhat" | sudo passwd root --stdin
+   SHELL
+end
+  
+    config.vm.define "four" do |four|
+  	four.vm.box = "centos7_x86-64"
+	four.vm.network "private_network", type: "dhcp"
+	four.vm.network "private_network", type: "dhcp"
+	four.vm.network "private_network", type: "dhcp"
+	four.vm.provider "virtualbox" do |v4|
+		v4.name = "Compute2"
+#		v4.gui = true
+		v4.memory = "2048"
+		v4.customize ["modifyvm", :id , "--hostonlyadapter2", "vboxnet0"]
+		v4.customize ["modifyvm", :id , "--hostonlyadapter3", "vboxnet1"]
+		v4.customize ["modifyvm", :id , "--hostonlyadapter4", "vboxnet2"]
+	end
+   four.vm.provision "shell", inline: <<-SHELL
+     mv /etc/yum.repos.d/*.repo /var/tmp/
+     cp /vagrant/*.repo /etc/yum.repos.d/
+     echo "redhat" | sudo passwd root --stdin
+   SHELL
+end
+    config.vm.define "five" do |five|
+  	five.vm.box = "centos7_x86-64"
+	five.vm.network "private_network", type: "dhcp"
+	five.vm.network "private_network", type: "dhcp"
+	five.vm.network "private_network", type: "dhcp"
+	five.vm.provider "virtualbox" do |v5|
+		v5.name = "Storage"
+#		v5.gui = true
+		v5.memory = "2048"
+		v5.customize ["modifyvm", :id , "--hostonlyadapter2", "vboxnet0"]
+		v5.customize ["modifyvm", :id , "--hostonlyadapter3", "vboxnet1"]
+		v5.customize ["modifyvm", :id , "--hostonlyadapter4", "vboxnet2"]
+	end
+   five.vm.provision "shell", inline: <<-SHELL
+     mv /etc/yum.repos.d/*.repo /var/tmp/
+     cp /vagrant/*.repo /etc/yum.repos.d/
+     echo "redhat" | sudo passwd root --stdin
+   SHELL
+end
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+  # config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #   vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+  #   vb.memory = "1024"
+  # end
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+
+  # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
+  # such as FTP and Heroku are also available. See the documentation at
+  # https://docs.vagrantup.com/v2/push/atlas.html for more information.
+  # config.push.define "atlas" do |push|
+  #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
+  # end
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   sudo apt-get update
+  #   sudo apt-get install -y apache2
+  # SHELL
+end
